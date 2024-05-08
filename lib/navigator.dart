@@ -44,7 +44,7 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
 
   final List<Widget> _screens = [
     Explore(),
-    Maps(),
+    // Maps(),
     Translator(),
     HotelsPage(),
     RestaurantsPage(),
@@ -143,13 +143,13 @@ class _NavigatorScreenState extends State<NavigatorScreen> {
                 Icons.search,
                 color: Colors.white,
               )),
-          CurvedNavigationBarItem(
+          /*CurvedNavigationBarItem(
               label: 'Maps',
               labelStyle: TextStyle(color: Colors.white),
               child: Icon(
                 Icons.map,
                 color: Colors.white,
-              )),
+              )),*/
           CurvedNavigationBarItem(
               label: 'Translate',
               labelStyle: TextStyle(color: Colors.white),

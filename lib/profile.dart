@@ -1,22 +1,15 @@
 import 'dart:async';
-
 import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:flutter/material.dart';
-
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:travelguide/authpage.dart';
-
 import 'package:travelguide/editprofile.dart';
-
 import 'package:travelguide/textfields3.dart';
-
-import 'package:travelguide/visited_country.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -26,6 +19,31 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  final PageController _pageController = PageController();
+
+/*
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _pageController.animateToPage(
+        index,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  final List<Widget> _screens = [
+    Explore(),
+    const Maps(),
+    const Translator(),
+    const HotelsPage(),
+    const RestaurantsPage()
+  ];
+*/
+
   String obscurePassword(String password) {
     return '*' * password.length;
   }
@@ -43,6 +61,7 @@ class _ProfileState extends State<Profile> {
   }
 
   Uint8List? pickedImage;
+
   void photofrom(ImageSource source) async {
     final ImagePicker picker = ImagePicker();
     final XFile? imageFile = await picker.pickImage(source: source);
@@ -77,7 +96,12 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: const Text(
+          'Profile',
+        ),
+      ),
+      // extendBodyBehindAppBar: true,
       extendBody: true,
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
@@ -89,15 +113,27 @@ class _ProfileState extends State<Profile> {
             final userData = snapshot.data!.data() as Map<String, dynamic>;
 
             return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Center(
+                // Page view deleted
+                /*Expanded(
+                  child: PageView(
+                    controller: _pageController,
+                    children: _screens,
+                  ),
+                ),*/
+
+                // Header deleted done :))
+                /*Center(
                   child: Stack(
                     children: [
                       Container(
-                        height: 230,
+                        height: 200,
                         child: AppBar(
                           //   automaticallyImplyLeading: false,
-                          backgroundColor: Color.fromARGB(255, 227, 227, 227),
+                          backgroundColor:
+                              const Color.fromARGB(159, 214, 212, 248),
                         ),
                       ),
                       Container(
@@ -113,7 +149,8 @@ class _ProfileState extends State<Profile> {
                                 bottomRight: Radius.circular(30)),
                           ),
                           toolbarHeight: 65,
-                          backgroundColor: Color.fromARGB(255, 33, 33, 33),
+                          backgroundColor:
+                              const Color.fromARGB(255, 63, 3, 213),
                           leading: Padding(
                             padding: const EdgeInsets.all(2.0),
                             child: IconButton(
@@ -122,7 +159,7 @@ class _ProfileState extends State<Profile> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                        const VisitedCountry()),
+                                            const VisitedCountry()),
                                   );
                                 },
                                 icon: const Icon(
@@ -131,16 +168,13 @@ class _ProfileState extends State<Profile> {
                                   size: 35,
                                 )),
                           ),
-                          actions: [
+                          actions: const [
                             Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: IconButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                icon: const Icon(
-                                  Icons.person,
-                                  color: Color.fromARGB(206, 162, 162, 162),
-                                  size: 35,
-                                ),
+                              padding: EdgeInsets.all(10.0),
+                              child: Icon(
+                                Icons.person,
+                                color: Color.fromARGB(206, 0, 0, 0),
+                                size: 35,
                               ),
                             ),
                           ],
@@ -178,7 +212,7 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 170),
+                        padding: const EdgeInsets.only(top: 130),
                         child: Center(
                           child: CircleAvatar(
                             backgroundColor: const Color.fromARGB(255, 0, 0, 0),
@@ -187,8 +221,8 @@ class _ProfileState extends State<Profile> {
                               radius: 50.0,
                               backgroundImage: pickedImage == null
                                   ? const AssetImage(
-                                "Lottie/defaultprofile.png",
-                              )
+                                      "Lottie/defaultprofile.png",
+                                    )
                                   : Image.memory(pickedImage!).image,
                             ),
                           ),
@@ -196,133 +230,194 @@ class _ProfileState extends State<Profile> {
                       ),
                     ],
                   ),
+                ),*/
+
+                Center(
+                  child: CircleAvatar(
+                    backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+                    radius: 52,
+                    child: CircleAvatar(
+                      radius: 50.0,
+                      backgroundImage: pickedImage == null
+                          ? const AssetImage(
+                        "Lottie/defaultprofile.png",
+                      )
+                          : Image.memory(pickedImage!).image,
+                    ),
+                  ),
+                ),
+                Text(
+                  userData['username'].toUpperCase(),
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    textStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1,
+                      fontSize: 20,
+                      color: Color.fromARGB(255, 0, 0, 0),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+
+                /*const SizedBox(
+                  height: 20,
+                ),*/
+                TextFields3(
+                  tag: "Username:",
+                  hint: userData['username'],
+                  icon: Icons.person,
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                TextFields3(
+                  tag: "Email:",
+                  hint: userData['email'],
+                  icon: Icons.mail,
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                TextFields3(
+                  tag: "Password:",
+                  hint: obscurePassword(userData['password']),
+                  icon: Icons.password,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "LOG OUT".toUpperCase(),
+                        style: GoogleFonts.poppins(
+                            textStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1,
+                              fontSize: 18,
+                              color: Color.fromARGB(255, 160, 155, 249),
+                            )),
+                      ),
+                      IconButton(
+                          onPressed: () async {
+                            await signOut();
+                          },
+                          icon: const Icon(
+                            Icons.logout,
+                            color: Color.fromARGB(255, 160, 155, 249),
+                          )),
+                    ],
+                  ),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 Center(
-                    child: Text(
-                      userData['username'].toUpperCase(),
-                      style: GoogleFonts.poppins(
-                          textStyle: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1,
-                              fontSize: 20,
-                              color: Color.fromARGB(255, 0, 0, 0))),
-                    )),
-                Text(userData['from']),
-                const SizedBox(
-                  height: 20,
-                ),
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 20,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(30.0),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color.fromARGB(255, 0, 0, 0)
+                                .withOpacity(0.4),
+                            blurRadius: 4,
+                            offset: const Offset(0, 8),
+                          )
+                        ]),
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const EditProfile()),
                       ),
-                      TextFields3(
-                        tag: "        Username:",
-                        hint: userData['username'],
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 12, 12, 12),
+                        minimumSize: const Size(160, 50),
                       ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      TextFields3(
-                        tag: "Email:",
-                        hint: userData['email'],
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      TextFields3(
-                        tag: "        Password:",
-                        hint: obscurePassword(userData['password']),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              "LOG OUT".toUpperCase(),
-                              style: GoogleFonts.poppins(
-                                  textStyle: const TextStyle(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Edit Profile",
+                            style: GoogleFonts.poppins(
+                                textStyle: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     letterSpacing: 1,
                                     fontSize: 18,
-                                    color: Color.fromARGB(255, 76, 0, 255),
-                                  )),
-                            ),
-                            IconButton(
-                                onPressed: () async {
-                                  await signOut();
-                                },
-                                icon: const Icon(
-                                  Icons.logout,
-                                  color: Color.fromARGB(255, 76, 0, 255),
-                                )),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      Center(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(30.0),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: const Color.fromARGB(255, 0, 0, 0)
-                                      .withOpacity(0.4),
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 8),
-                                )
-                              ]),
-                          child: ElevatedButton(
-                            onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const EditProfile()),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                              const Color.fromARGB(255, 12, 12, 12),
-                              minimumSize: const Size(160, 50),
-                            ),
-                            child: Text(
-                              "Edit Profile",
-                              style: GoogleFonts.poppins(
-                                  textStyle: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: 1,
-                                      fontSize: 18,
-                                      color:
-                                      Color.fromARGB(255, 255, 255, 255))),
-                            ),
+                                    color: Color.fromARGB(255, 255, 255, 255))),
                           ),
-                        ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Icon(Icons.edit),
+                        ],
                       ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                    ],
+                    ),
                   ),
+                ),
+                const SizedBox(
+                  height: 30,
                 ),
               ],
             );
+          } else if (snapshot.hasError) {
+            return Center(child: Text('error${snapshot.error}'));
           } else {
-            if (snapshot.hasError) {
-              return Center(child: Text('error${snapshot.error}'));
-            }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
         }),
       ),
+      /*bottomNavigationBar: CurvedNavigationBar(
+        onTap: _onItemTapped,
+        index: _selectedIndex,
+        height: 70,
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        color: const Color.fromARGB(255, 63, 3, 213),
+        items: const [
+          CurvedNavigationBarItem(
+              label: 'Explore',
+              labelStyle: TextStyle(color: Colors.white, fontSize: 12),
+              child: Icon(
+                Icons.search,
+                color: Colors.white,
+              )),
+          CurvedNavigationBarItem(
+              label: 'Maps',
+              labelStyle: TextStyle(color: Colors.white, fontSize: 12),
+              child: Icon(
+                Icons.map,
+                color: Colors.white,
+              )),
+          CurvedNavigationBarItem(
+              label: 'Translate',
+              labelStyle: TextStyle(color: Colors.white, fontSize: 12),
+              child: Icon(
+                Icons.translate,
+                color: Colors.white,
+              )),
+          CurvedNavigationBarItem(
+              label: 'Hotels',
+              labelStyle: TextStyle(color: Colors.white, fontSize: 12),
+              child: Icon(
+                Icons.bed,
+                color: Colors.white,
+              )),
+          CurvedNavigationBarItem(
+              label: 'Food',
+              labelStyle: TextStyle(color: Colors.white, fontSize: 12),
+              child: Icon(
+                Icons.restaurant,
+                color: Colors.white,
+              )),
+        ],
+      ),*/
     );
   }
 }
